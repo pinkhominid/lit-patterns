@@ -1,22 +1,46 @@
-<script type=module>
-  import './patterns.js'
-</script>
+<!doctype html>
+<html lang=en>
+  <head>
+    <title>Lit Patterns</title>
+    <style>
+      fieldset { margin-bottom: 1.5em; }
+      img { height: 32px; width: 32px; padding: 6px; }
+    </style>
+    <script type=module src=./patterns.js></script>
+    <script>
+      document.addEventListener('click', e => {
+        if (!e.target.matches('button')) return
+        document
+          .querySelector(`#${e.target.getAttribute('aria-controls')}`)
+          .toggleAttribute(e.target.value)
+      })
+    </script>
+  </head>
+  <body>
 
-<h1>Lit Patterns</h1>
+    <h1>Lit Patterns</h1>
 
-<fieldset>
-  <legend>Default Hidden Pattern</legend>
-  <default-hidden></default-hidden>
-</fieldset>
+    <fieldset>
+      <legend>Default Hidden Pattern</legend>
+      <default-hidden id=hidden-toggle-target></default-hidden>
+      <button aria-controls=hidden-toggle-target value=hidden>Toggle Hidden</button>
+    </fieldset>
 
-<fieldset>
-  <legend>Open Property Pattern</legend>
-  <open-property></open-property>
-  <open-property open></open-property>
-</fieldset>
+    <fieldset>
+      <legend>Open Property Pattern</legend>
+      <open-property id=open-toggle-target></open-property>
+      <button aria-controls=open-toggle-target value=open>Toggle Open</button>
+    </fieldset>
 
-<fieldset>
-  <legend>Default Light DOM Content Pattern</legend>
-  <default-light-dom-content></default-light-dom-content>
-  <default-light-dom-content>This is consumer set light DOM content</default-light-dom-content>
-</fieldset>
+    <fieldset>
+      <legend>Default Light DOM Content Pattern</legend>
+      <default-light-dom-content></default-light-dom-content>
+      <default-light-dom-content>This is consumer set light DOM content</default-light-dom-content>
+    </fieldset>
+
+    <footer>
+      <a href=https://github.com/pinkhominid/lit-patterns><img src=./github.svg></a>
+    </footer>
+
+  </body>
+</html>
