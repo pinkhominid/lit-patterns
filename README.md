@@ -7,8 +7,7 @@ npx snowpack
 npx http-server -o
 ```
 
-Create your own patterns repo quickly
-
+Create your own patterns repo from scratch
 ```sh
 mkdir my-lit-patterns
 cd my-lit-patterns
