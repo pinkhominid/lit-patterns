@@ -1,13 +1,14 @@
 <!doctype html>
 <html lang=en>
   <head>
+    <meta name=viewport content=width=device-width>
     <title>Lit Patterns</title>
     <style>
-      fieldset { margin-bottom: 1.5em; }
-      img { height: 32px; width: 32px; padding: 6px; }
+      fieldset { margin-bottom: 1.5em }
+      #gh-logo { height: 32px; width: 32px; padding: 6px }
     </style>
     <script type=module src=./patterns.js></script>
-    <script>
+    <script type=module>
       document.addEventListener('click', e => {
         if (!e.target.matches('button')) return
         document
@@ -17,7 +18,6 @@
     </script>
   </head>
   <body>
-
     <h1>Lit Patterns</h1>
 
     <fieldset>
@@ -39,8 +39,9 @@
     </fieldset>
 
     <footer>
-      <a href=https://github.com/pinkhominid/lit-patterns><img src=./github.svg></a>
+      <a href=https://github.com/pinkhominid/lit-patterns>
+        <img id=gh-logo alt=GitHub src=./github.svg>
+      </a>
     </footer>
-
   </body>
 </html>
