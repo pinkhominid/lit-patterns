@@ -1,6 +1,8 @@
 # Lit Patterns
 
-Run the patterns
+[Live](https://pinkhominid.github.io/lit-patterns/)
+
+Local
 ```sh
 npm i
 npx snowpack
