@@ -8,6 +8,7 @@
       #gh-logo { height: 32px; width: 32px; padding: 6px }
     </style>
     <script type=module src=./patterns.js></script>
+    <script type=module src=./unidirectional-data-flow-form.js></script>
     <script type=module>
       document.addEventListener('click', e => {
         if (!e.target.matches('button')) return
@@ -15,27 +16,39 @@
           .querySelector(`#${e.target.getAttribute('aria-controls')}`)
           .toggleAttribute(e.target.value)
       })
+      document.querySelector('unidirectional-data-flow-form').addEventListener('save', e => {
+        e.target.disabled = true
+        console.log('Save unidirectional-data-flow-form', e.detail)
+      })
+      document.querySelector('unidirectional-data-flow-form').addEventListener('cancel', e => {
+        console.log('Cancel unidirectional-data-flow-form')
+      })
     </script>
   </head>
   <body>
     <h1>Lit Patterns</h1>
 
     <fieldset>
-      <legend>Default Hidden Pattern</legend>
+      <legend>Default Hidden</legend>
       <default-hidden id=hidden-toggle-target></default-hidden>
       <button aria-controls=hidden-toggle-target value=hidden>Toggle Hidden</button>
     </fieldset>
 
     <fieldset>
-      <legend>Open Property Pattern</legend>
+      <legend>Open Property</legend>
       <open-property id=open-toggle-target></open-property>
       <button aria-controls=open-toggle-target value=open>Toggle Open</button>
     </fieldset>
 
     <fieldset>
-      <legend>Default Light DOM Content Pattern</legend>
+      <legend>Default Light DOM Content</legend>
       <default-light-dom-content></default-light-dom-content>
       <default-light-dom-content>This is consumer set light DOM content</default-light-dom-content>
+    </fieldset>
+
+    <fieldset>
+      <legend>Unidirectional Data Flow Form</legend>
+      <unidirectional-data-flow-form></unidirectional-data-flow-form>
     </fieldset>
 
     <footer>
