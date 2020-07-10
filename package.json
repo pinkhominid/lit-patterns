@@ -4,15 +4,15 @@
   "description": "",
   "main": "patterns.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "http-server -a localhost -o",
-    "prepare": "snowpack --include \"*.js\""
+    "prepare": "rimraf web_modules && snowpack --include \"*.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "http-server": "^0.12.1",
+    "rimraf": "^3.0.2",
     "snowpack": "^1.7.1"
   },
   "dependencies": {
