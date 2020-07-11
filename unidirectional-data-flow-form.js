@@ -15,7 +15,6 @@ import { LitElement, defaultConverter, css, html } from './web_modules/lit-eleme
  * Demo async option data
  *
  * Todo:
- * Demo datalist (combobox)
  * Other form validation patterns
  * Demo Async save
  * Demo side-effect free (clone props)
@@ -32,10 +31,12 @@ export class UnidirectionalDataFlowFormElement extends LitElement {
       wearsGlasses: Boolean,
       kind: Number,
       favTastes: Array,
+      iceCream: String,
       comments: String,
 
       eyeColors: Array,
       kinds: Array,
+      iceCreams: Array,
       tastes: Array,
 
       disabled: Boolean
@@ -74,6 +75,14 @@ export class UnidirectionalDataFlowFormElement extends LitElement {
       { id: 3, name: 'Sweet' },
       { id: 4, name: 'Umami' },
     ]
+    this.iceCreams = [
+      'Chocolate',
+      'Coconut',
+      'Mint',
+      'Strawberry',
+      'Vanilla',
+    ]
+
     this.disabled = false
   }
 
@@ -83,6 +92,7 @@ export class UnidirectionalDataFlowFormElement extends LitElement {
     this.wearsGlasses = false
     this.kind = -1
     this.favTastes = []
+    this.iceCream = ''
     this.comments = ''
   }
 
@@ -143,6 +153,15 @@ export class UnidirectionalDataFlowFormElement extends LitElement {
                 </option>
               `)}
             </select>
+          </label>
+
+          <label>Ice Cream:
+            <input list=iceCreams name=iceCream value=${this.iceCream}>
+            <datalist id=iceCreams>
+              ${this.iceCreams.map(iceCream => html`
+                <option value=${iceCream}>
+              `)}
+            </datalist>
           </label>
 
           <label>Comments:
