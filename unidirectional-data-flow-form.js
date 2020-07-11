@@ -1,5 +1,4 @@
-import { LitElement, css, html } from './web_modules/lit-element.js'
-import { guard } from './web_modules/lit-html/directives/guard.js'
+import { LitElement, defaultConverter, css, html } from './web_modules/lit-element.js'
 
 /**
  * Demonstrates uni-directional data flow for html forms
@@ -13,17 +12,18 @@ import { guard } from './web_modules/lit-html/directives/guard.js'
  * Semantic HTML
  * Disabled form
  * A11y
- * Demos async option data
+ * Demo async option data
  *
  * Todo:
- * Cancel (w/preventDefault) not resetting select and radio
- * Single state prop (how to define and automate type conversion? defaultConverter?)
- * Demonstrate side-effect free (clone props, immer?)
+ * Demo datalist (combobox)
  * Other form validation patterns
- * Demo Aync save
- * State machine?
- * Reflection?
+ * Demo Async save
+ * Demo side-effect free (clone props)
+ *
+ * Consider single state prop (how to define and automate type conversion?)
+ * Consider using a state machine
  */
+
 export class UnidirectionalDataFlowFormElement extends LitElement {
   static get properties() {
     return {
@@ -78,12 +78,12 @@ export class UnidirectionalDataFlowFormElement extends LitElement {
   }
 
   init() {
-    this.name = null
-    this.eyeColor = null
+    this.name = ''
+    this.eyeColor = -1
     this.wearsGlasses = false
-    this.kind = null
+    this.kind = -1
     this.favTastes = []
-    this.comments = null
+    this.comments = ''
   }
 
   render() {
@@ -101,8 +101,10 @@ export class UnidirectionalDataFlowFormElement extends LitElement {
           </label>
 
           <label>Eye Color:
-            ${guard([this.eyeColors], () => this.eyeColors.length
-              ? this.eyeColors.map(eyeColor => html`
+            <!-- Show loading message before required async data arrives -->
+            ${!this.eyeColors.length
+              ? html`Loading…`
+              : this.eyeColors.map(eyeColor => html`
                 <label>${eyeColor.name}
                   <input
                     name=eyeColor
@@ -113,8 +115,7 @@ export class UnidirectionalDataFlowFormElement extends LitElement {
                   >
                 </label>
               `)
-              : html`loading…`
-            )}
+            }
           </label>
 
           <label>Glasses?
@@ -148,16 +149,12 @@ export class UnidirectionalDataFlowFormElement extends LitElement {
             <textarea name=comments .value=${this.comments}></textarea>
           </label>
 
-          <button .disabled=${!this.ready}>Save</button>
+          <button>Save</button>
           <button type=reset>Cancel</button>
 
         </fieldset>
       </form>
     `
-  }
-
-  get ready() {
-    return this.eyeColors.length && this.kinds.length && this.tastes.length
   }
 
   get state() {
@@ -168,19 +165,21 @@ export class UnidirectionalDataFlowFormElement extends LitElement {
     }, {})
   }
 
-  reportValidity() {
-    return this.shadowRoot.querySelector('form').reportValidity()
+  isFormSubmittable() {
+    // 1. Collections supplying options for required fields are populated
+    // 2. HTML form validation requirements are met
+    return this.eyeColors.length && this.shadowRoot.querySelector('form').reportValidity()
   }
 
   onFormSubmit(e) {
     e.preventDefault()
-    if (this.reportValidity()) {
+    if (this.isFormSubmittable()) {
       this.dispatchEvent(new CustomEvent('save', { detail: this.state }))
     }
   }
 
   onFormReset(e) {
-    // e.preventDefault()
+    // can't preventDefault as reset behavior is necessary to deselect radio groups
     this.init()
     this.dispatchEvent(new CustomEvent('cancel'))
   }
@@ -188,10 +187,13 @@ export class UnidirectionalDataFlowFormElement extends LitElement {
   onFormInput(e) {
     if (e.target.matches('select[multiple]')) {
       this[e.target.name] = Array.from(e.target.selectedOptions).map(
-        option => parseInt(option.value)
+        // use defaultConverter to convert form values to numbers (assumes numeric IDs)
+        option => defaultConverter.fromAttribute(option.value, Number)
       )
     } else {
-      this[e.target.name] = e.target[e.target.type === 'checkbox' ? 'checked' : 'value']
+      // use property converter to convert form values to declared types
+      const convert = this.constructor.properties[e.target.name]
+      this[e.target.name] = convert(e.target[e.target.type === 'checkbox' ? 'checked' : 'value'])
     }
   }
 }
